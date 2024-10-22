@@ -1,0 +1,10 @@
+C 
+-system("cls") = limpar console;
+-COMPARAR CARACTERES, USA ASPAS SIMPLES. STRINGS usa ASPAS DUPLAS;
+-#include <ctype.h> = 
+isupper(int c): Verifica se o caractere c é uma letra maiúscula (A-Z).
+
+isdigit(int c): Verifica se o caractere c é um dígito (0-9).
+
+ispunct(int c): Verifica se o caractere c é um caractere de pontuação (como !, @, #, etc.);
+-getchar() = tipo o console.Readkey() em C#;
