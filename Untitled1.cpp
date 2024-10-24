@@ -2,24 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <conio.c>
 #include <windows.h>
-#include <conio.h>
 
 void ExibirOpcoesMenu();
 void RegistrarUsuario();
 char VerificarSenha(char *a);
 int op;
-char senha [20];
-char usuario [20];
+int erro=0;
 
-void textcolor(int color) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, color);
-}
-
-int main() {
+int main() {	
     ExibirOpcoesMenu();
-    
     return 0;
 }
 //----------------------------------
@@ -27,8 +20,8 @@ void ExibirOpcoesMenu()
 {
  int corOriginal = 7;
 	
-	printf("\n\n\n\n\n\n");
-	textcolor(14); //cor amarelo para o menu
+	textcolor(14);
+	printf("\n\n\n");
 	printf("\n                                                __  ___ ______ _   __ __  __\n");
 	printf("                                               /  |/  // ____// | / // / / /\n");
 	printf("                                              / /|_/ // __/  /  |/ // / / / \n");
@@ -84,7 +77,8 @@ void ExibirOpcoesMenu()
     textcolor(corOriginal);
     printf("                                        OPCAO ESCOLHIDA: ");
     scanf("%d", &op);
-	
+    getchar(); // Captura nova linha
+          	
 	switch (op) 
 	{
 		case 1:
@@ -100,20 +94,24 @@ void ExibirOpcoesMenu()
 			//OpcaoExtra();
 			break;
 		default:
-			printf("Opcao invalida");
+			textcolor(4);
+			printf("\nOpcao invalida.Tente novamente!");
 	}
 	
 }
 //---------------------------------
 void RegistrarUsuario() {
+	char senha [15];
+	char senhaVer [20];
+	char usuario [20];
     char cont;
     char op = 's'; // inicializa op para entrar no loop
     int corOriginal = 7; //7 é branco
+    int x;
     
 	
     system("cls");
-    textcolor(4);
-    printf("(ESQ) Para voltar ao menu\n");
+
     textcolor(3);
 	printf("-----------------------------------------------------------------------------------------------------------------------"); 
     printf("\n				     ____   ______ ______ ____ _____ ______ ____   ____ \n");
@@ -128,49 +126,67 @@ void RegistrarUsuario() {
     textcolor(corOriginal);
     
 
-            printf("                         Atente-se aos requisitos necessarios para criar uma");
+            printf("\n                         Atente-se aos requisitos necessarios para criar uma");
 			
 			textcolor(10);
 			printf(" senha segura!\n");
 			textcolor(corOriginal);
 			printf("\n");
-            printf("                                        A) 8 a 12 caracteres\n");
-            printf("                                        B) Pelo menos uma letra maiuscula\n");
-            printf("                                        C) Pelo menos um numero\n");
-            printf("                                        D) Pelo menos um caracter especial\n");
-            Sleep(4000);
-            printf("                                        Vamos continuar!\n");
-            Sleep(4000);
- 	
-			textcolor(14);
-            printf("                                        Usuario:");
-            textcolor(corOriginal);
-            scanf("%s", usuario);
-    
-            // laço de repetição para solicitar que o usuário informe novamente a senha, até que ela atenda aos requisitos.
-            do 
-            {
-            	textcolor(14);
-                printf("                                         Senha:");
-                textcolor(corOriginal);
-                scanf("%s", senha);
-                
-                 printf("\n");
-                // verificar se a senha não satisfaz as regras. Ou seja, se o return da função não for 1
-                if (!VerificarSenha(senha)) 
-                {
-                	textcolor(4);
-                    printf("                       Senha invalida. Releia as orientacoes para criar uma senha segura e tente novamente!\n");
-                    printf("\n");
-                }
-            } while (!VerificarSenha(senha));
+            printf("                                              A) 8 a 12 caracteres\n");
+            printf("                                              B) Pelo menos uma letra maiuscula\n");
+            printf("                                              C) Pelo menos um numero\n");
+            printf("                                              D) Pelo menos um caracter especial\n");
+
             
-            printf("Cadastro realizado com sucesso!\n");
-            printf("Deseja realizar um novo cadastro? (S/N): ");
-            scanf(" %c", &op);
-            op = tolower(op);    
-        }
+			textcolor(14);
+			gotoxy(50,16);
+			printf("Nome: ");
+			gotoxy(50,17);
+			printf("Senha: ");
+			gotoxy(50,18);
+			printf("Repita Senha: ");
+			do{
+				gotoxy(56,16);
+		    	printf("                                                              "); 
+		    	textcolor(corOriginal);
+		    	gotoxy(56,16);
+				gets(usuario);
+			} while (strlen(usuario) == 0 || strlen(usuario) >= 20);
+			
+			do{ 
+		       gotoxy(57,17);
+		       textcolor(corOriginal);
+		       printf("                "); 
+		       gotoxy(57,17);
+		       gets(senha);
+		       if(VerificarSenha(senha) == 0){ 
+					gotoxy(50,18);
+					printf("                                                                ");
+					gotoxy(32,18);
+					textcolor(4);
+		    		printf("Atente-se aos requisitos estabelecidos e tente novamente!");
+		    		gotoxy(48,19); 
+		    		textcolor(14);
+		    		printf("Repita senha: ");
+			   }
+    } while (VerificarSenha(senha) == 0);
     
+	    if(erro == 0) { 
+			do {
+	    		gotoxy(65,18);
+	    		printf("                                                                ");
+	    		gotoxy(65,18);
+	    		gets(senhaVer);
+	    	} while (strcmp(senhaVer,senha) != 0);
+	    } else { 
+	    	do {
+	    		gotoxy(65,19);
+	    		printf("                                                                ");
+	    		gotoxy(65,19);
+	    		gets(senhaVer);
+	    	} while (strcmp(senhaVer,senha) != 0);
+		}
+}
 
 //-----------------------------------
 char VerificarSenha(char *a) {
@@ -188,14 +204,22 @@ comprimento = strlen(a);
 	//vamos percorrer a senha, para ver se ela se encaixa na proposta das regras que determinamos.
 	for (int i =0; i<comprimento; i++)
 	{
-		if (isupper(senha[i])) temMaiuscula = 1;
-		if (isdigit(senha[i])) temNumero = 1;
-		if (ispunct(senha[i])) temEspecial = 1;	
+		if (isupper(a[i])) temMaiuscula = 1;
+		if (isdigit(a[i])) temNumero = 1;
+		if (ispunct(a[i])) temEspecial = 1;	
 	}
-	
-	 return temMaiuscula && temNumero && temEspecial; 
+		
 	 // a função irá retornar 1 se todas as condições forem atendidas/satisfeitas!
+	 if (temMaiuscula == 1  && temNumero == 1 && temEspecial == 1) {
+		return 1; 
+	 } else {
+			erro++;
+			return 0;
+		}
+	 
 }
+//--------------------------------------
+
 
 
 
