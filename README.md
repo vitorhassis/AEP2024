@@ -2,7 +2,7 @@
 
 ###
 
-<p align="center">Projeto simulando um sistema de Login em C, capaz de registrar, listar, editar e excluir usuários (CRUD), armazenando os dados em um arquivo TXT</p>
+<p align="center">-Projeto simulando um sistema de Login em C, capaz de registrar, listar, editar e excluir usuários (CRUD), armazenando os dados em um arquivo TXT;</p>
 
 ###
 
